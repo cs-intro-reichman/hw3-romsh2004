@@ -44,7 +44,6 @@ public class LoanCalc {
         double L = loan / n;
         double H = loan;
         
-        // במקרים קיצוניים, נגדיל את הגבול העליון
         while (endBalance(loan, rate, n, H) > 0) {
             H *= 2;
         }
