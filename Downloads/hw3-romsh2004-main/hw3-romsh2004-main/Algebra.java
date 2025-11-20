@@ -9,11 +9,17 @@ public class Algebra {
 	}  
 
 public static int plus(int x1, int x2) {
+    // 1. אם x2 שלילי, הופך לחיסור: x1 - |x2|
     if (x2 < 0) {
+        // minus(0, x2) מחזיר את הערך המוחלט של x2
         return minus(x1, minus(0, x2)); 
-    }    if (x1 < 0) {
+    } 
+    // 2. אם x1 שלילי (אבל x2 חיובי), הופך לחיסור: x2 - |x1|
+    if (x1 < 0) {
         return minus(x2, minus(0, x1));
     }
+    
+    // 3. מקרה בסיס: שניים חיוביים (או x2=0)
     int result = x1;
     int i = 0;
     while (i < x2) {
@@ -21,12 +27,31 @@ public static int plus(int x1, int x2) {
         i++;
     }
     return result;
-	}
+}
 
 public static int minus(int x1, int x2) {
+    // 1. אם x2 שלילי, הופך לחיבור: x1 + |x2|
+    if (x2 < 0) {
+        return plus(x1, minus(0, x2));
+    }
     
-    int inverted_x2 = minus(0, x2); 
-    return plus(x1, inverted_x2);
+    // 2. אם x1 שלילי ו-x2 חיובי: (-|x1|) - x2 = -( |x1| + x2 )
+    if (x1 < 0) {
+        // נשתמש ב-minus(0, x1) כדי לקבל את |x1|
+        int absX1 = minus(0, x1);
+        int sum = plus(absX1, x2);
+        // נהפוך את סימן הסכום
+        return minus(0, sum); 
+    }
+    
+    // 3. מקרה בסיס: חיסור חוזר באמצעות -- (כששני המספרים חיוביים)
+    int result = x1;
+    int i = 0;
+    while (i < x2) {
+        result--;
+        i++;
+    }
+    return result;
 }
 
 public static int times(int x1, int x2) {
