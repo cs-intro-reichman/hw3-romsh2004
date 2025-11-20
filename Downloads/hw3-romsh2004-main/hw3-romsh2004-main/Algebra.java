@@ -24,21 +24,9 @@ public static int plus(int x1, int x2) {
 	}
 
 public static int minus(int x1, int x2) {
-        if (x2 < 0) {
-        return plus(x1, minus(0, x2));
-    }
-    if (x1 < 0) {
-        int absX1 = minus(0, x1);
-        int sum = plus(absX1, x2);
-        return minus(0, sum); 
-    }
-    int result = x1;
-    int i = 0;
-    while (i < x2) {
-        result--;
-        i++;
-    }
-    return result;
+    
+    int inverted_x2 = minus(0, x2); 
+    return plus(x1, inverted_x2);
 }
 
 public static int times(int x1, int x2) {
@@ -133,7 +121,6 @@ public static int sqrt(int x) {
     }
 	
 
-	//עםקןחרקעםןחקעםןקרחעםןקרחעםןקרחעןחק
     
     return ans;
 }	  
