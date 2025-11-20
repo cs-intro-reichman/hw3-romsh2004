@@ -23,7 +23,6 @@ public class Anagram {
 	}  
 
 	public static boolean isAnagram(String str1, String str2) {
-        // מכיוון ש-preProcess החדש מוחק רווחים, אין צורך ב-replace כאן, אבל זה לא מזיק
 		String s1 = preProcess(str1);
 		String s2 = preProcess(str2);
 		
@@ -40,7 +39,6 @@ public class Anagram {
 		String res = "";
 		for (int i = 0; i < str.length(); i++) {
 			char c = str.charAt(i);
-            // התיקון: התנאי בודק רק אם זה אות. כל השאר (כולל רווחים) נמחק.
 			if ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z')) {
 				if (c >= 'A' && c <= 'Z') {
 					res += (char)(c + 32);
