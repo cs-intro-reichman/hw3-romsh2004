@@ -1,250 +1,147 @@
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.io.IOException;
+// Implements algebraic operations and the square root function without using 
+// the Java operations a + b, a - b, a * b, a / b, a % b, and without calling 
+// Math.sqrt. All the functions in this class operate on int values and
+// return int values.
 
-public class TestAlgebra {
-    private static int totalTests = 0;
-    private static int passedTests = 0;
+public class Algebra {
+    public static void main(String args[]) {
+        // בדיקות עצמיות בסיסיות (כפי שמופיעות בקובץ המקורי)
+        System.out.println(plus(2,3));   // 5
+        System.out.println(minus(7,2));  // 5
+        System.out.println(minus(2,7));  // -5
+        System.out.println(times(3,4));  // 12
+        System.out.println(plus(2,times(4,2)));  // 10
+        System.out.println(pow(5,3));      // 125
+        System.out.println(pow(3,5));      // 243
+        System.out.println(div(12,3));   // 4    
+        System.out.println(div(5,5));    // 1  
+        System.out.println(div(25,7));   // 3
+        System.out.println(mod(25,7));   // 4
+        System.out.println(mod(120,6));  // 0    
+        System.out.println(sqrt(36));    // 6
+        System.out.println(sqrt(263169)); // 513
+        System.out.println(sqrt(76123)); // 275
+    }  
 
-    public static void main(String[] args) {
-        testPlus();
-        testMinus();
-        testTimes();
-        testPow();
-        testDiv();
-        testMod();
-        testSqrt();
-        testForbiddenOperators();
-        
-        System.out.println("\nTotal tests: " + totalTests);
-        System.out.println("Passed tests: " + passedTests);
-        System.out.println("Success rate: " + (passedTests * 100.0 / totalTests) + "%");
-    }
-
-    private static int testPlus() {
-        System.out.println("\nTesting plus operations:");
-        totalTests += 6;
-        
-        boolean test1 = Algebra.plus(2, 3) == 5;
-        System.out.println("Test 1 (basic addition): " + (test1 ? "PASS" : "FAIL"));
-        
-        boolean test2 = Algebra.plus(0, 0) == 0;
-        System.out.println("Test 2 (zero addition): " + (test2 ? "PASS" : "FAIL"));
-        
-        boolean test3 = Algebra.plus(-1, 1) == 0;
-        System.out.println("Test 3 (negative numbers): " + (test3 ? "PASS" : "FAIL"));
-        
-        boolean test4 = Algebra.plus(100, 200) == 300;
-        System.out.println("Test 4 (large numbers): " + (test4 ? "PASS" : "FAIL"));
-        
-        boolean test5 = Algebra.plus(-5, -3) == -8;
-        System.out.println("Test 5 (negative result): " + (test5 ? "PASS" : "FAIL"));
-        
-        boolean test6 = Algebra.plus(Integer.MAX_VALUE - 1, 1) == Integer.MAX_VALUE;
-        System.out.println("Test 6 (max value): " + (test6 ? "PASS" : "FAIL"));
-
-        int passed = (test1 ? 1 : 0) + (test2 ? 1 : 0) + (test3 ? 1 : 0) + 
-                    (test4 ? 1 : 0) + (test5 ? 1 : 0) + (test6 ? 1 : 0);
-        passedTests += passed;
-        return passed;
-    }
-
-    private static int testMinus() {
-        System.out.println("\nTesting minus operations:");
-        totalTests += 6;
-        
-        boolean test1 = Algebra.minus(7, 2) == 5;
-        System.out.println("Test 1 (basic subtraction): " + (test1 ? "PASS" : "FAIL"));
-        
-        boolean test2 = Algebra.minus(2, 7) == -5;
-        System.out.println("Test 2 (negative result): " + (test2 ? "PASS" : "FAIL"));
-        
-        boolean test3 = Algebra.minus(0, 0) == 0;
-        System.out.println("Test 3 (zero subtraction): " + (test3 ? "PASS" : "FAIL"));
-        
-        boolean test4 = Algebra.minus(100, 50) == 50;
-        System.out.println("Test 4 (large numbers): " + (test4 ? "PASS" : "FAIL"));
-        
-        boolean test5 = Algebra.minus(-5, -3) == -2;
-        System.out.println("Test 5 (negative numbers): " + (test5 ? "PASS" : "FAIL"));
-        
-        boolean test6 = Algebra.minus(Integer.MIN_VALUE + 1, 1) == Integer.MIN_VALUE;
-        System.out.println("Test 6 (min value): " + (test6 ? "PASS" : "FAIL"));
-
-        int passed = (test1 ? 1 : 0) + (test2 ? 1 : 0) + (test3 ? 1 : 0) + 
-                    (test4 ? 1 : 0) + (test5 ? 1 : 0) + (test6 ? 1 : 0);
-        passedTests += passed;
-        return passed;
-    }
-
-    private static int testTimes() {
-        System.out.println("\nTesting times operations:");
-        totalTests += 6;
-        
-        boolean test1 = Algebra.times(3, 4) == 12;
-        System.out.println("Test 1 (basic multiplication): " + (test1 ? "PASS" : "FAIL"));
-        
-        boolean test2 = Algebra.times(0, 5) == 0;
-        System.out.println("Test 2 (multiply by zero): " + (test2 ? "PASS" : "FAIL"));
-        
-        boolean test3 = Algebra.times(-2, 3) == -6;
-        System.out.println("Test 3 (negative number): " + (test3 ? "PASS" : "FAIL"));
-        
-        boolean test4 = Algebra.times(-2, -3) == 6;
-        System.out.println("Test 4 (negative numbers): " + (test4 ? "PASS" : "FAIL"));
-        
-        boolean test5 = Algebra.times(100, 0) == 0;
-        System.out.println("Test 5 (large number by zero): " + (test5 ? "PASS" : "FAIL"));
-        
-        boolean test6 = Algebra.times(1, 1) == 1;
-        System.out.println("Test 6 (identity): " + (test6 ? "PASS" : "FAIL"));
-
-        int passed = (test1 ? 1 : 0) + (test2 ? 1 : 0) + (test3 ? 1 : 0) + 
-                    (test4 ? 1 : 0) + (test5 ? 1 : 0) + (test6 ? 1 : 0);
-        passedTests += passed;
-        return passed;
-    }
-
-    private static int testPow() {
-        System.out.println("\nTesting power operations:");
-        totalTests += 6;
-        
-        boolean test1 = Algebra.pow(5, 3) == 125;
-        System.out.println("Test 1 (basic power): " + (test1 ? "PASS" : "FAIL"));
-        
-        boolean test2 = Algebra.pow(2, 0) == 1;
-        System.out.println("Test 2 (zero exponent): " + (test2 ? "PASS" : "FAIL"));
-        
-        boolean test3 = Algebra.pow(0, 5) == 0;
-        System.out.println("Test 3 (zero base): " + (test3 ? "PASS" : "FAIL"));
-        
-        boolean test4 = Algebra.pow(1, 10) == 1;
-        System.out.println("Test 4 (identity): " + (test4 ? "PASS" : "FAIL"));
-        
-        boolean test5 = Algebra.pow(2, 4) == 16;
-        System.out.println("Test 5 (power of 2): " + (test5 ? "PASS" : "FAIL"));
-        
-        boolean test6 = Algebra.pow(-2, 3) == -8;
-        System.out.println("Test 6 (negative base): " + (test6 ? "PASS" : "FAIL"));
-
-        int passed = (test1 ? 1 : 0) + (test2 ? 1 : 0) + (test3 ? 1 : 0) + 
-                    (test4 ? 1 : 0) + (test5 ? 1 : 0) + (test6 ? 1 : 0);
-        passedTests += passed;
-        return passed;
-    }
-
-    private static int testDiv() {
-        System.out.println("\nTesting division operations:");
-        totalTests += 6;
-        
-        boolean test1 = Algebra.div(12, 3) == 4;
-        System.out.println("Test 1 (basic division): " + (test1 ? "PASS" : "FAIL"));
-        
-        boolean test2 = Algebra.div(25, 7) == 3;
-        System.out.println("Test 2 (integer division): " + (test2 ? "PASS" : "FAIL"));
-        
-        boolean test3 = Algebra.div(0, 5) == 0;
-        System.out.println("Test 3 (zero dividend): " + (test3 ? "PASS" : "FAIL"));
-        
-        boolean test4 = Algebra.div(100, 10) == 10;
-        System.out.println("Test 4 (large numbers): " + (test4 ? "PASS" : "FAIL"));
-        
-        boolean test5 = Algebra.div(-15, 3) == -5;
-        System.out.println("Test 5 (negative dividend): " + (test5 ? "PASS" : "FAIL"));
-        
-        boolean test6 = Algebra.div(-15, -3) == 5;
-        System.out.println("Test 6 (negative numbers): " + (test6 ? "PASS" : "FAIL"));
-
-        int passed = (test1 ? 1 : 0) + (test2 ? 1 : 0) + (test3 ? 1 : 0) + 
-                    (test4 ? 1 : 0) + (test5 ? 1 : 0) + (test6 ? 1 : 0);
-        passedTests += passed;
-        return passed;
-    }
-
-    private static int testMod() {
-        System.out.println("\nTesting modulo operations:");
-        totalTests += 6;
-        
-        boolean test1 = Algebra.mod(25, 7) == 4;
-        System.out.println("Test 1 (basic modulo): " + (test1 ? "PASS" : "FAIL"));
-        
-        boolean test2 = Algebra.mod(120, 6) == 0;
-        System.out.println("Test 2 (no remainder): " + (test2 ? "PASS" : "FAIL"));
-        
-        boolean test3 = Algebra.mod(0, 5) == 0;
-        System.out.println("Test 3 (zero dividend): " + (test3 ? "PASS" : "FAIL"));
-        
-        boolean test4 = Algebra.mod(7, 3) == 1;
-        System.out.println("Test 4 (small numbers): " + (test4 ? "PASS" : "FAIL"));
-        
-        boolean test5 = Algebra.mod(17, 5) == 2;
-        System.out.println("Test 5 (larger numbers): " + (test5 ? "PASS" : "FAIL"));
-        
-        boolean test6 = Algebra.mod(100, 10) == 0;
-        System.out.println("Test 6 (divisible): " + (test6 ? "PASS" : "FAIL"));
-
-        int passed = (test1 ? 1 : 0) + (test2 ? 1 : 0) + (test3 ? 1 : 0) + 
-                    (test4 ? 1 : 0) + (test5 ? 1 : 0) + (test6 ? 1 : 0);
-        passedTests += passed;
-        return passed;
-    }
-
-    private static int testSqrt() {
-        System.out.println("\nTesting square root operations:");
-        totalTests += 6;
-        
-        boolean test1 = Algebra.sqrt(36) == 6;
-        System.out.println("Test 1 (perfect square): " + (test1 ? "PASS" : "FAIL"));
-        
-        boolean test2 = Algebra.sqrt(0) == 0;
-        System.out.println("Test 2 (zero): " + (test2 ? "PASS" : "FAIL"));
-        
-        boolean test3 = Algebra.sqrt(1) == 1;
-        System.out.println("Test 3 (one): " + (test3 ? "PASS" : "FAIL"));
-        
-        boolean test4 = Algebra.sqrt(263169) == 513;
-        System.out.println("Test 4 (large perfect square): " + (test4 ? "PASS" : "FAIL"));
-        
-        boolean test5 = Algebra.sqrt(76123) == 275;
-        System.out.println("Test 5 (floor value): " + (test5 ? "PASS" : "FAIL"));
-        
-        boolean test6 = Algebra.sqrt(10000) == 100;
-        System.out.println("Test 6 (power of 10): " + (test6 ? "PASS" : "FAIL"));
-
-        int passed = (test1 ? 1 : 0) + (test2 ? 1 : 0) + (test3 ? 1 : 0) + 
-                    (test4 ? 1 : 0) + (test5 ? 1 : 0) + (test6 ? 1 : 0);
-        passedTests += passed;
-        return passed;
-    }
-
-    private static int testForbiddenOperators() {
-        System.out.println("\nTesting forbidden operators:");
-        totalTests += 1;
-        
-        try {
-            String algebraCode = new String(Files.readAllBytes(Paths.get("Algebra.java")));
-            algebraCode = algebraCode.replaceAll("\".*\"", "")
-                                   .replaceAll("/\\*.*?\\*/", "")
-                                   .replaceAll("//.*", "");
-            
-            String[] forbidden = {
-                "\\+[^+]", "-[^-]", "\\*", "/", "%", "Math\\.pow", "Math\\.sqrt"
-            };
-
-            for (String operator : forbidden) {
-                if (algebraCode.matches(".*" + operator + ".*")) {
-                    System.out.println("Test 1 (no forbidden operators): FAIL");
-                    System.out.println("Found forbidden operator matching: " + operator);
-                    return 0;
-                }
+    // Returns x1 + x2
+    public static int plus(int x1, int x2) {
+        if (x2 < 0) {
+            for (int i = 0; i > x2; i--) {
+                x1--;
             }
-            System.out.println("Test 1 (no forbidden operators): PASS");
-            passedTests += 1;
-            return 1;
-        } catch (IOException e) {
-            System.out.println("Test 1 (no forbidden operators): FAIL");
-            System.out.println("Could not read Algebra.java");
-            return 0;
+        } else {
+            for (int i = 0; i < x2; i++) {
+                x1++;
+            }
         }
+        return x1;
     }
-} 
+
+    // Returns x1 - x2
+    public static int minus(int x1, int x2) {
+        if (x2 < 0) {
+            for (int i = 0; i > x2; i--) {
+                x1++;
+            }
+        } else {
+            for (int i = 0; i < x2; i++) {
+                x1--;
+            }
+        }
+        return x1;
+    }
+
+    // Returns x1 * x2
+    public static int times(int x1, int x2) {
+        if (x1 == 0 || x2 == 0) return 0;
+        
+        // בדיקת סימן התוצאה
+        boolean isNegative = (x1 < 0) != (x2 < 0);
+        
+        // המרת x1 ו-x2 לערכים חיוביים לטובת הלולאה
+        int absX1 = x1 < 0 ? minus(0, x1) : x1;
+        int absX2 = x2 < 0 ? minus(0, x2) : x2;
+        
+        int result = 0;
+        for (int i = 0; i < absX2; i++) {
+            result = plus(result, absX1);
+        }
+        
+        return isNegative ? minus(0, result) : result;
+    }
+
+    // Returns x^n (for n >= 0)
+    public static int pow(int x, int n) {
+        if (n == 0) return 1;
+        if (x == 0) return 0;
+        
+        int result = 1;
+        // אם הבסיס שלילי והחזקה אי-זוגית, התוצאה שלילית
+        // אבל פונקציית times שלנו כבר מטפלת בסימנים נכון, אז פשוט נקרא לה.
+        for (int i = 0; i < n; i++) {
+            result = times(result, x);
+        }
+        return result;
+    }
+
+    // Returns the integer part of x1 / x2 
+    public static int div(int x1, int x2) {
+        if (x2 == 0) return 0; // חלוקה באפס
+        
+        boolean isNegative = (x1 < 0) != (x2 < 0);
+        
+        int absX1 = x1 < 0 ? minus(0, x1) : x1;
+        int absX2 = x2 < 0 ? minus(0, x2) : x2;
+        
+        int count = 0;
+        while (absX1 >= absX2) {
+            absX1 = minus(absX1, absX2);
+            count++;
+        }
+        
+        return isNegative ? minus(0, count) : count;
+    }
+
+    // Returns x1 % x2
+    public static int mod(int x1, int x2) {
+        if (x2 == 0) return 0;
+        
+        // שארית ב-Java מקבלת את הסימן של המחולק (x1)
+        // נחשב הכל בחיובי ואז נתקן סימן
+        int absX1 = x1 < 0 ? minus(0, x1) : x1;
+        int absX2 = x2 < 0 ? minus(0, x2) : x2;
+        
+        while (absX1 >= absX2) {
+            absX1 = minus(absX1, absX2);
+        }
+        
+        return (x1 < 0) ? minus(0, absX1) : absX1;
+    }   
+
+    // Returns the integer part of sqrt(x) 
+    public static int sqrt(int x) {
+        if (x <= 0) return 0;
+        if (x == 1) return 1;
+        
+        int low = 1;
+        int high = x;
+        int ans = 1;
+        
+        // חיפוש בינארי
+        while (low <= high) {
+            int diff = minus(high, low);
+            int mid = plus(low, div(diff, 2));
+            int square = times(mid, mid);
+            
+            if (square == x) return mid;
+            
+            if (square < x) { // אם הריבוע קטן מ-x, אולי התשובה גדולה יותר
+                ans = mid;
+                low = plus(mid, 1);
+            } else { // אם הריבוע גדול מ-x, התשובה בטוח קטנה יותר
+                high = minus(mid, 1);
+            }
+        }
+        return ans;
+    }         
+}
