@@ -18,33 +18,33 @@ public class Algebra {
         System.out.println(sqrt(76123));
     }
 
-    // Returns x1 + x2
+    // Returns x1 + x2 (מימוש איטרטיבי פשוט ללא תלות ב-minus)
     public static int plus(int x1, int x2) {
-        // אם x2 חיובי, נוסיף 1, x2 פעמים
-        if (x2 >= 0) {
-            for (int i = 0; i < x2; i++) {
-                x1++;
-            }
-        } else {
-            // אם x2 שלילי, נחסיר 1, |x2| פעמים
+        if (x2 < 0) {
+            // אם x2 שלילי, יורדים למטה
             for (int i = 0; i > x2; i--) {
                 x1--;
+            }
+        } else {
+            // אם x2 חיובי, עולים למעלה
+            for (int i = 0; i < x2; i++) {
+                x1++;
             }
         }
         return x1;
     }
 
-    // Returns x1 - x2
+    // Returns x1 - x2 (מימוש איטרטיבי פשוט ללא תלות ב-plus)
     public static int minus(int x1, int x2) {
-        // אם x2 חיובי, נחסיר 1, x2 פעמים
-        if (x2 >= 0) {
-            for (int i = 0; i < x2; i++) {
-                x1--;
-            }
-        } else {
-            // אם x2 שלילי (מינוס מינוס שווה פלוס), נוסיף 1, |x2| פעמים
+        if (x2 < 0) {
+            // חיסור מספר שלילי זה כמו חיבור (מינוס מינוס)
             for (int i = 0; i > x2; i--) {
                 x1++;
+            }
+        } else {
+            // חיסור רגיל
+            for (int i = 0; i < x2; i++) {
+                x1--;
             }
         }
         return x1;
@@ -52,20 +52,24 @@ public class Algebra {
 
     // Returns x1 * x2
     public static int times(int x1, int x2) {
-        // קביעת הסימן של התוצאה
-        boolean negativeResult = (x1 < 0 && x2 > 0) || (x1 > 0 && x2 < 0);
-        
-        // עבודה עם ערכים מוחלטים כדי להקל על הלולאה
-        int absX1 = x1 < 0 ? minus(0, x1) : x1;
-        int absX2 = x2 < 0 ? minus(0, x2) : x2;
-        
+        // בדיקת אפסים
+        if (x1 == 0 || x2 == 0) return 0;
+
+        // עבודה עם ערכים חיוביים בלולאה
+        int absX2 = x2 > 0 ? x2 : minus(0, x2);
         int result = 0;
+        
+        // חיבור חוזר
         for (int i = 0; i < absX2; i++) {
-            result = plus(result, absX1);
+            result = plus(result, x1);
         }
         
-        // החזרת הסימן במידת הצורך
-        return negativeResult ? minus(0, result) : result;
+        // תיקון סימן אם x2 היה שלילי (כי חיברנו את x1 כמות חיובית של פעמים)
+        if (x2 < 0) {
+            return minus(0, result);
+        }
+        
+        return result;
     }
 
     // Returns x^n (for n >= 0)
@@ -80,14 +84,14 @@ public class Algebra {
 
     // Returns the integer part of x1 / x2 
     public static int div(int x1, int x2) {
-        if (x2 == 0) return 0; // חלוקה באפס
+        if (x2 == 0) return 0; // אי אפשר לחלק באפס
         
-        // קביעת הסימן
-        boolean negativeResult = (x1 < 0 && x2 > 0) || (x1 > 0 && x2 < 0);
+        // קביעת הסימן הסופי
+        boolean isNegative = (x1 < 0) != (x2 < 0);
         
-        // עבודה עם ערכים מוחלטים
-        int absX1 = x1 < 0 ? minus(0, x1) : x1;
-        int absX2 = x2 < 0 ? minus(0, x2) : x2;
+        // עבודה עם ערכים חיוביים
+        int absX1 = x1 >= 0 ? x1 : minus(0, x1);
+        int absX2 = x2 >= 0 ? x2 : minus(0, x2);
         
         int count = 0;
         while (absX1 >= absX2) {
@@ -95,22 +99,21 @@ public class Algebra {
             count++;
         }
         
-        return negativeResult ? minus(0, count) : count;
+        return isNegative ? minus(0, count) : count;
     }
 
     // Returns x1 % x2
     public static int mod(int x1, int x2) {
         if (x2 == 0) return 0;
         
-        // מודולו בדרך כלל מקבל את הסימן של המחולק (x1) ברוב השפות, אבל נממש פשוט:
-        int absX1 = x1 < 0 ? minus(0, x1) : x1;
-        int absX2 = x2 < 0 ? minus(0, x2) : x2;
+        int absX1 = x1 >= 0 ? x1 : minus(0, x1);
+        int absX2 = x2 >= 0 ? x2 : minus(0, x2);
         
         while (absX1 >= absX2) {
             absX1 = minus(absX1, absX2);
         }
-        // אם המספר המקורי היה שלילי, השארית צריכה להיות תואמת (תלוי הגדרה, כאן נשאיר חיובי)
-        return x1 < 0 ? minus(0, absX1) : absX1; 
+        // ב-Java השארית מקבלת את הסימן של המחולק (x1)
+        return (x1 < 0) ? minus(0, absX1) : absX1;
     }
 
     // Returns the integer part of sqrt(x) 
@@ -122,6 +125,7 @@ public class Algebra {
         int ans = 1;
         
         while (low <= high) {
+            // mid = (low + high) / 2
             int mid = plus(low, div(minus(high, low), 2));
             int square = times(mid, mid);
             
